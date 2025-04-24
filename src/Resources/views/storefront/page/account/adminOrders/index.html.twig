@@ -1,0 +1,45 @@
+{% sw_extends '@Storefront/storefront/page/account/_page.html.twig' %}
+
+{% block page_account_main_content %}
+    <div class="account-abandoned-carts b2b-create-title-text">
+        <input type="hidden" name="parentname" value="Abandoned Carts">
+        <h1 class="account-abandoned-carts__title">Abandoned Carts</h1>
+
+        {% if abandonedCarts is not empty %}
+            <div class="table-responsive">
+                <table class="account-abandoned-carts__table table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Item Name</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% set totalPrice = 0 %}
+                        {% for cart in abandonedCarts %}
+                            {% for lineItem in cart.lineItems %}
+                                <tr>
+                                    <td>{{ lineItem.name }}</td>
+                                    <td>{{ lineItem.quantity }}</td>
+                                    <td>{{ lineItem.price|currency('EUR') }}</td>
+                                </tr>
+                                {% set totalPrice = totalPrice + (lineItem.price * lineItem.quantity) %}
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" class="text-end"><strong>Total Price:</strong></td>
+                            <td><strong>{{ totalPrice|currency('EUR') }}</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-warning mt-4">
+                <i class="bi bi-info-circle"></i> No abandoned carts found.
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

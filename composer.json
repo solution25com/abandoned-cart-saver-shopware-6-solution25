@@ -1,0 +1,32 @@
+{
+    "name": "s25/abandoned-cart-admin",
+    "description": "Admin Orders",
+    "type": "shopware-platform-plugin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "shopware/core": "~6.6.0"
+    },
+    "extra": {
+        "shopware-plugin-class": "Admin\\AbandonedCartAdmin",
+        "label": {
+            "de-DE": "Admin Orders",
+            "en-GB": "Admin Orders"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Admin\\": "/src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Admin\\Tests\\": "/src"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "symfony/runtime": true
+        }
+    }
+}

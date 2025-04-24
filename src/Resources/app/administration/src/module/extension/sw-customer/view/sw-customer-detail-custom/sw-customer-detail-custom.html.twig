@@ -1,0 +1,82 @@
+<template>
+    <sw-card title="Customer Carts">
+        <template #default>
+          <div v-if="carts.length === 0" class="empty-state">
+                <p>No carts available for this user.</p>
+                <p>Once they add items, their carts will appear here.</p>
+            </div>
+            <div v-else>
+                <sw-data-grid
+                    :columns="columns"
+                    :dataSource="carts"
+                    :isLoading="isLoading"
+                >
+             <template #column-actions="{ item }">
+             <sw-button variant="primary" size="small" @click="openCreateOrderModal(item)">
+                Create Order
+            </sw-button>
+            </template>
+                 <template #actions="{ item }">
+                      <sw-context-menu-item @click="openLineItemsModal(item)">
+                        View Line Items
+                    </sw-context-menu-item>
+           <sw-context-menu-item variant="danger" @click="openDeleteConfirmationModal(item)">
+                Delete
+           </sw-context-menu-item>
+                </template>
+                </sw-data-grid>
+            </div>
+        </template>
+    </sw-card>
+     <sw-modal 
+     v-if="showLineItemsModal" 
+     title="Cart Line Items" 
+     @modal-close="closeLineItemsModal"
+     size="small">
+    <sw-data-grid
+        :dataSource="selectedCartLineItems"
+        :columns="lineItemColumns"
+        :showSelection="false">
+        <template #column-label="{ item }">
+            {{ item.label }}
+        </template>
+        <template #column-quantity="{ item }">
+            {{ item.quantity }}
+        </template>
+   <template #column-unitPrice="{ item }">
+        {{ formatCurrency(item.unitPrice) }}
+    </template>
+    </sw-data-grid>
+</sw-modal>
+    <sw-modal 
+    v-if="showCreateOrderModal" 
+    title="Confirm Order Creation" 
+    @modal-close="closeCreateOrderModal" 
+    class="custom-small-modal" 
+    size="small">
+    <p>Are you sure you want to create an order for this cart?</p>
+    
+    <template #modal-footer>
+        <sw-button @click="closeCreateOrderModal" variant="ghost">
+            Cancel
+        </sw-button>
+        <sw-button @click="confirmCreateOrder" variant="primary">
+            Confirm
+        </sw-button>
+    </template>
+</sw-modal>
+    <sw-modal v-if="showDeleteConfirmationModal" title="Confirm Deletion" @modal-close="showDeleteConfirmationModal = false" class="custom-small-modal" size="small">
+        <p>Are you sure you want to delete this abandoned cart?</p>
+        <template #modal-footer>
+            <sw-button @click="showDeleteConfirmationModal = false" variant="ghost">
+                Cancel
+            </sw-button>
+            <sw-button @click="confirmDeleteCart" variant="danger">
+                Confirm
+            </sw-button>
+        </template>
+        
+    </sw-modal>
+
+
+</template>

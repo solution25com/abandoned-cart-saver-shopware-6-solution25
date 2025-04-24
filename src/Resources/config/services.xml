@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <defaults autowire="true" autoconfigure="true" />
+
+        <service id="Admin\Core\Checkout\AbandonedCart\AbandonedCartDefinition">
+            <tag name="shopware.entity.definition" entity="sl_25_abandoned_cart" />
+        </service>
+
+            <service id="Admin\Storefront\Controller\AdminOrdersController" public="true">
+            <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader"/>
+           <argument type="service" id="sl_25_abandoned_cart.repository"/>
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+            <call method="setTwig">
+                <argument type="service" id="twig"/>
+            </call>
+        </service>
+
+        <service id="Admin\Core\Checkout\Cart\CartRepository">
+            <argument type="service" id="Doctrine\DBAL\Connection" />
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />
+        </service>
+
+        <service id="Admin\Core\Checkout\AbandonedCart\AbandonedCartManager">
+            <argument type="service" id="Admin\Core\Checkout\Cart\CartRepository" />
+            <argument type="service" id="sl_25_abandoned_cart.repository" />
+        </service>
+
+        <service id="Admin\Command\DeleteAbandonedCartCommand">
+            <argument type="service" id="Admin\Core\Checkout\AbandonedCart\AbandonedCartManager" />
+            <tag name="console.command" />
+        </service>
+
+        <service id="Admin\Command\MarkAbandonedCartCommand">
+            <argument type="service" id="Admin\Core\Checkout\AbandonedCart\AbandonedCartManager" />
+            <tag name="console.command" />
+        </service>
+
+        <service id="Admin\Command\UpdateAbandonedCartCommand">
+            <argument type="service" id="Admin\Core\Checkout\AbandonedCart\AbandonedCartManager" />
+            <tag name="console.command" />
+        </service>
+
+
+        <!-- scheduled_tasks -->
+
+        <service id="Admin\Service\ScheduledTask\DeleteAbandonedCartTask">
+            <tag name="shopware.scheduled.task" />
+        </service>
+
+        <service id="Admin\Service\ScheduledTask\DeleteAbandonedCartTaskHandler">
+            <argument type="service" id="scheduled_task.repository" />
+            <argument type="service" id="Admin\Core\Checkout\AbandonedCart\AbandonedCartManager" />
+            <tag name="messenger.message_handler" />
+        </service>
+
+        <service id="Admin\Service\ScheduledTask\UpdateAbandonedCartTask">
+            <tag name="shopware.scheduled.task" />
+        </service>
+
+        <service id="Admin\Service\ScheduledTask\UpdateAbandonedCartTaskHandler">
+            <argument type="service" id="scheduled_task.repository" />
+            <argument type="service" id="Admin\Core\Checkout\AbandonedCart\AbandonedCartManager" />
+            <tag name="messenger.message_handler" />
+        </service>
+
+        <service id="Admin\Service\ScheduledTask\MarkAbandonedCartTask">
+            <tag name="shopware.scheduled.task" />
+        </service>
+
+        <service id="Admin\Service\ScheduledTask\MarkAbandonedCartTaskHandler">
+            <argument type="service" id="scheduled_task.repository" />
+            <argument type="service" id="Admin\Core\Checkout\AbandonedCart\AbandonedCartManager" />
+            <tag name="messenger.message_handler" />
+        </service> 
+
+
+        <!-- end scheduled_tasks -->
+
+        <service id="AbandonedCartAdmin.logger" class="Monolog\Logger">
+            <argument type="string">AbandonedCartAdmin</argument>
+            <argument type="collection">
+                <argument type="service" id="AbandonedCartAdmin.rotatingHandler" />
+            </argument>
+        </service>
+
+        <service id="AbandonedCartAdmin.rotatingHandler" class="Monolog\Handler\RotatingFileHandler">
+            <argument type="string">
+                %kernel.logs_dir%/AbandonedCartAdmin-log-%kernel.environment%.log</argument>
+        </service>
+
+    </services>
+</container>
