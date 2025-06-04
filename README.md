@@ -90,6 +90,52 @@ After running the last command, press `1` and hit **Enter** when prompted. This 
 
  
    - Click the **Create Order** button to convert a cart into an official Shopware order.
+  
+
+# Save Carts Plugin - Admin API Documentation
+
+This document describes the custom Admin API endpoint provided by the Save Carts Plugin for Shopware 6. This endpoint allows authorized users to create an order from a customer's existing (abandoned) cart.
+
+---
+
+## Create Order from Abandoned Cart
+
+**Endpoint:**  
+`POST /api/_action/abandoned-cart/{customerId}/create-order`
+
+**Description:**  
+Creates an order from a saved cart associated with the given `customerId`.  
+This endpoint is useful for:  
+- Recovering abandoned carts  
+- Manually or automatically triggering cart-to-order conversion  
+- Admin-side marketing flows or automation tools
+
+**Request Headers:**
+- `Authorization: Bearer <your-access-token>`
+- `Content-Type: application/json`
+
+**Successful Response:**
+```json
+{
+  "success": true,
+  "message": "Order created successfully"
+}
+```
+
+**Example Error Response:**
+```json
+{
+  "success": false,
+  "message": "Cart not found"
+}
+```
+
+## Authentication
+
+All endpoints require a valid **Admin API Bearer token**.  
+You can obtain this token via the standard Shopware Admin API authentication process.
+
+---
 
  
 ## Best Practices
