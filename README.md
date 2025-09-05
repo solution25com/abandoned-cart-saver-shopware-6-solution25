@@ -18,6 +18,9 @@ This tool is useful for customer service teams and sales staff to reach out and 
    - Allows administrators to create an order directly from an abandoned cart.
 5. **Scheduled Tasks**
    - Automatically updates and maintains abandoned cart data via scheduled Symfony tasks.
+  
+## Compatibility
+- ✅ Shopware 6.6.x 
 
  
 ## Get Started
@@ -180,3 +183,4 @@ You can obtain this token via the standard Shopware Admin API authentication pro
    - The plugin logs the customer's name, cart total, number of items, creation time, and individual line items.
 
  
+
