@@ -1,5 +1,5 @@
 {
-    "name": "s25/abandoned-cart-admin",
+    "name": "solution25/abandoned-cart-admin",
     "description": "Admin Orders",
     "type": "shopware-platform-plugin",
     "version": "1.0.0",
